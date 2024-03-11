@@ -1,0 +1,48 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+V.Local.sPath.Declare(String)
+V.Local.bRet.Declare(Boolean)
+V.Local.iRet.Declare(Long)
+
+F.Intrinsic.Control.If(V.Caller.GSSVersion,<,2015.3)
+	F.Intrinsic.String.Concat(V.Caller.PluginsDir,"\GAB\GAS\GSHFSCR.gas",V.Local.sPath)
+	F.Intrinsic.Debug.SetLA(V.Local.sPath)
+F.Intrinsic.Control.Else
+	F.Intrinsic.String.Concat(V.Caller.PluginsDir,"\PatchWidget.exe",V.Local.sPath)
+	F.Intrinsic.Debug.SetLA(V.Local.sPath)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.File.Exists(V.Local.sPath,V.Local.bRet)
+F.Intrinsic.Control.If(v.Local.bRet)
+
+	F.Intrinsic.Debug.SetLA("Attempting to queue all HFs or the patch...")
+
+	F.Intrinsic.Control.If(V.Caller.GSSVersion,<,2015.3)
+		F.Global.General.CallSyncGAS(V.Local.sPath,"TSKSCH")
+	F.Intrinsic.Control.Else
+		f.Global.Task.InvokeWithLaunchFile("",V.Caller.PluginsDir,"PatchWidget.exe SCH",v.Local.iRet)
+		F.Intrinsic.Debug.SetLA("PID: ",V.Local.iRet)
+	F.Intrinsic.Control.EndIf
+
+	F.Intrinsic.Debug.SetLA("Attempt complete... hope it worked...")
+
+F.Intrinsic.Control.Else
+
+	F.Intrinsic.Debug.SetLA(V.Local.sPath," could not be found")
+
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.End
+
+Program.Sub.Main.End
+
+Program.Sub.Comments.Start
+${$0$}$PPT_AutoQueueHFs$}$MARY$}$4/20/2015
+Program.Sub.Comments.End
+
